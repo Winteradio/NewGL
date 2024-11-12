@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <sstream>
+#include <vector>
 
 #pragma comment(linker, "/entry:WinMainCRTStartup")
 #pragma comment(linker, "/subsystem:console")
@@ -138,7 +139,7 @@ unsigned int EBO;
 
 void Triangle()
 {
-    std::string shaderFolder = "./shader/";
+    std::string shaderFolder = "C:/Users/Winteradio/Desktop/WGL/shader/";
     std::string vsFileName = "SimpleColor.vs";
     std::string fsFileName = "SimpleColor.fs";
 
@@ -177,9 +178,9 @@ void Triangle()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float positions[] = {
-        -0.5f, -0.5f, 0.0f, // left  
-         0.5f, -0.5f, 0.0f, // right 
-         0.0f,  0.5f, 0.0f  // top   
+        -0.5f, -0.5f, 0.0f, 5.0f, // left  
+         0.5f, -0.5f, 0.0f, 5.0f, // right 
+         0.0f,  0.5f, 0.0f, 5.0f // top   
     }; 
 
     float colors[] = {
@@ -207,7 +208,7 @@ void Triangle()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), nullptr, GL_STATIC_DRAW);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(indices), (void*)indices);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)sizeof(positions));
