@@ -1,0 +1,2 @@
+#ifndef __VERTEXSHADERCONT_H__
+#define __VERTEXSHADERCONT_H__

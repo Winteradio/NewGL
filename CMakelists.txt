@@ -20,11 +20,13 @@ MESSAGE(STATUS "Set Source File")
 SET(MAIN_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 SET(SRC_DIR ${MAIN_DIR}/src )
 SET(GLAD_DIR ${MAIN_DIR}/glad )
+SET(INCLUDE_DIR ${MAIN_DIR}/include)
 
 ## Source Files
 LIST(APPEND SRCS
     ## Demo file
     ${SRC_DIR}/main.cpp
+    ${SRC_DIR}/Shader.cpp
     ${GLAD_DIR}/src/gl.c
     ${GLAD_DIR}/src/wgl.c
 )
@@ -32,6 +34,7 @@ LIST(APPEND SRCS
 ## Header Files
 LIST(APPEND INCS 
     ${GLAD_DIR}/include
+    ${INCLUDE_DIR}
 )
 
 ADD_EXECUTABLE( ${PROJECT_NAME} WIN32 ${SRCS} )
@@ -73,36 +76,12 @@ MESSAGE( STATUS "Setting Done" )
 
 
 
-#### Window SDK ---------------------------------- #
-MESSAGE( STATUS "Window - Linking : WINDOW SDK")
-
-SET( WINDOWSDK_INCLUDE_DIR
-	"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared"
-	"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um"
-	"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt
-	")
-
-SET( WINDOWSDK_LIB_DIR
-	"C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um"
-	)
-
-SET( WINDOWSDK_LIBS winMM.lib Pdh.lib)
-
-LIST( APPEND DEP_INCLUDE ${WINDOWSDK_INCLUDE_DIR} )
-LIST( APPEND DEP_LIB_DIR ${WINDOWSDK_LIB_DIR} )
-LIST( APPEND DEP_LIBS ${WINDOWSDK_LIBS} )
-
-MESSAGE( STATUS "WindowSDK - Done")
-#### Window SDK ---------------------------------- #
-
-
-
 # ------ Link LogProject on Target  ------------- #
 MESSAGE(STATUS "Set Options for Target Files")
 
 TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME} PUBLIC ${DEP_INCLUDE} ${INCS} )
 TARGET_LINK_DIRECTORIES( ${PROJECT_NAME} PUBLIC ${LIB_DIR} ${DEP_LIB_DIR} )
-TARGET_LINK_LIBRARIES( ${PROJECT_NAME} PUBLIC ${DEP_LIBS} opengl32.lib gdi32.lib user32.lib )
+TARGET_LINK_LIBRARIES( ${PROJECT_NAME} PUBLIC ${DEP_LIBS} opengl32.lib gdi32.lib )
 
 MESSAGE(STATUS "Setting Done ")
 # ----------------------------------------------- #
