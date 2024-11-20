@@ -21,12 +21,16 @@ SET(MAIN_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 SET(SRC_DIR ${MAIN_DIR}/src )
 SET(GLAD_DIR ${MAIN_DIR}/glad )
 SET(INCLUDE_DIR ${MAIN_DIR}/include)
+SET(PREFIX_DIR ${MAIN_DIR}/build)
+
+INCLUDE(Dependency.cmake)
 
 ## Source Files
 LIST(APPEND SRCS
     ## Demo file
     ${SRC_DIR}/main.cpp
     ${SRC_DIR}/Shader.cpp
+    ${SRC_DIR}/Camera.cpp
     ${GLAD_DIR}/src/gl.c
     ${GLAD_DIR}/src/wgl.c
 )
@@ -44,44 +48,12 @@ MESSAGE(STATUS "Setting Done ")
 
 
 
-# ------ Set Variables for Dependency ----------- #
-MESSAGE( STATUS "Setting Variables for Dependency")
-
-SET( DEP_INCLUDE )
-SET( DEP_LIB_DIR )
-SET( DEP_LIBS )
-SET( DEP_LIST )
-
-MESSAGE( STATUS "Setting Done")
-# ----------------------------------------------- #
-
-
-
-# ------ Set Options for Target Files ----------- #
-MESSAGE( STATUS "Add Executable by platform")
-
-## Include Header Directories for Target Files
-IF ( WIN32 )
-    SET( STATIC_LIB lib )
-    SET( DYNAMIC_LIB dll)
-
-ELSE ()
-    SET( STATIC_LIB a )
-    SET( DYNAMIC_LIB so )
-
-ENDIF()
-
-MESSAGE( STATUS "Setting Done" )
-# ----------------------------------------------- #
-
-
-
 # ------ Link LogProject on Target  ------------- #
 MESSAGE(STATUS "Set Options for Target Files")
 
-TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME} PUBLIC ${DEP_INCLUDE} ${INCS} )
+TARGET_INCLUDE_DIRECTORIES( ${PROJECT_NAME} PUBLIC ${INCS} )
 TARGET_LINK_DIRECTORIES( ${PROJECT_NAME} PUBLIC ${LIB_DIR} ${DEP_LIB_DIR} )
-TARGET_LINK_LIBRARIES( ${PROJECT_NAME} PUBLIC ${DEP_LIBS} opengl32.lib gdi32.lib )
+TARGET_LINK_LIBRARIES( ${PROJECT_NAME} PUBLIC ${DEP_LIBS} opengl32.${STATIC_LIB} gdi32.${STATIC_LIB} )
 
 MESSAGE(STATUS "Setting Done ")
 # ----------------------------------------------- #
