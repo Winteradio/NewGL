@@ -1,11 +1,18 @@
 #include "Shader.h"
 
-#include "glad/gl.h"
-#include "glad/wgl.h"
+#include "glad/glad.h"
+#include "glad/glad_wgl.h"
+#include "NewLog.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
+Shader::Shader(const Shader& other)
+    : m_ShaderType(other.m_ShaderType)
+    , m_FilePath(other.m_FilePath)
+    , m_ShaderID(other.m_ShaderID)
+{}
 
 Shader::Shader(const Type type, const std::string& filePath)
     : m_ShaderType(type)
@@ -13,17 +20,53 @@ Shader::Shader(const Type type, const std::string& filePath)
     , m_ShaderID(0)
 {}
 
-Shader::~Shader()
+Shader::Shader(Shader&& other)
+    : m_ShaderType(other.m_ShaderType)
+    , m_FilePath(other.m_FilePath)
+    , m_ShaderID(other.m_ShaderID)
 {}
+
+Shader& Shader::operator=(const Shader& other)
+{
+    if (this != &other)
+    {
+        m_ShaderType = other.m_ShaderType;
+        m_FilePath = other.m_FilePath;
+        m_ShaderID = other.m_ShaderID;
+    }
+
+    return *this;
+}
+
+Shader& Shader::operator=(Shader&& other)
+{
+    m_ShaderType = other.m_ShaderType;
+    m_FilePath = other.m_FilePath;
+    m_ShaderID = other.m_ShaderID;
+
+    return *this;
+}
+
+Shader::~Shader()
+{
+    if (m_ShaderID != GL_NONE)
+    {
+        LOG(INFO) << "Delete Shader(" << m_ShaderID <<")\n";
+
+        glDeleteShader(m_ShaderID);
+
+        m_ShaderID = GL_NONE;
+    }
+}
 
 bool Shader::Init()
 {
-    const UINT32 shaderType = GetShaderType();
+    const UINT32 shaderType = ConvertShaderType();
     const std::string stShaderSource = GetShaderSource();
 
     if (GL_NONE == shaderType || stShaderSource.empty())
     {
-        std::cout << "Failed to create shader, the shader info is invalid" << std::endl;
+        LOG(ERROR) << "Failed to create shader, the shader info is invalid\n";
         return false;
     }
 
@@ -40,14 +83,14 @@ bool Shader::Init()
     if (!success)
     {
         glGetShaderInfoLog(m_ShaderID, 512, NULL, infoLog);
-        std::cout << "ERROR: " << infoLog << std::endl;
+        LOG(ERROR) << infoLog << "\n";
         return false;
     }
 
     return true;
 }
 
-const UINT32 Shader::GetShaderType()
+const UINT32 Shader::ConvertShaderType()
 {
     UINT32 shaderType = GL_NONE;
     if (Type::VERTEX == m_ShaderType)
@@ -78,16 +121,16 @@ const std::string Shader::GetShaderSource()
 {
     if (m_FilePath.empty())
     {
-        std::cout << "Failed to open shader file, cause the file path is empty" << std::endl;
+        LOG(ERROR) << "Failed to open shader file, cause the file path is empty\n";
         return std::string();
     }
 
-    std::cout << m_FilePath << std::endl;
+    LOG(INFO) << m_FilePath << "\n";
 
     std::ifstream file(m_FilePath);
     if (!file.is_open())
     {
-        std::cout << "Failed to open shader file" << std::endl;
+        LOG(ERROR) << "Failed to open shader file\n";
         return std::string();
     }
 
@@ -96,6 +139,6 @@ const std::string Shader::GetShaderSource()
 
     std::string shaderCode = fileBuffer.str();
 
-    std::cout << "Code : " << shaderCode << std::endl;
+    LOG(INFO) << "Code : " << shaderCode << "\n";
     return shaderCode;
 }

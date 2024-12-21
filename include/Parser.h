@@ -1,8 +1,8 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
-#include "glad/gl.h"
-#include "glad/wgl.h"
+#include "glad/glad.h"
+#include "glad/glad_wgl.h"
 
 #include "Type.h"
 

@@ -18,17 +18,31 @@ class Shader
             COMPUTE
         };
 
+        struct TypeCompare
+        {
+            bool operator()(const Type& _lhs, const Type& _rhs) const
+            {
+                return static_cast<UINT8>(_lhs) < static_cast<UINT8>(_rhs);
+            }
+        };
+
     public :
         Shader() = delete;
+        Shader(const Shader& other);
         Shader(const Type type, const std::string& filePath);
+        Shader(Shader&& other);
         virtual ~Shader();
+
+        Shader& operator=(const Shader& other);
+        Shader& operator=(Shader&& other);
 
     public :
         bool Init();
-        UINT32 GetShaderID() { return m_ShaderID; }
+        const UINT32 GetShaderID() const { return m_ShaderID; }
+        const Type GetShaderType() const { return m_ShaderType; }
 
     private :
-        const UINT32 GetShaderType();
+        const UINT32 ConvertShaderType();
         const std::string GetShaderSource();
 
     private :

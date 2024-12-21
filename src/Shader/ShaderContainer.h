@@ -1,4 +1,0 @@
-#ifndef __SHADERCONTAINER_H__
-#define __SHADERCONTAINER_H__
-
-#endif // __SHADERCONTAINER_H__

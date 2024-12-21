@@ -4,6 +4,8 @@ layout (location = 1) in vec4 aColor;
 
 out vec4 oColor;
 
+uniform mat4 gMatrixModel;
+
 void main()
 {
    oColor = aColor;

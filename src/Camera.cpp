@@ -6,7 +6,7 @@ Camera::Camera()
 Camera::~Camera()
 {}
 
-void Camera::Init()
+void Camera::Init(const FVEC3 vEye, const FVEC3 vAt)
 {}
 
 FMAT4 Camera::GetViewMatrix()
