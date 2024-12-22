@@ -13,4 +13,7 @@ using UINT16 = uint16_t;
 using UINT32 = uint32_t;
 using UINT64 = uint64_t;
 
+using FLOAT32 = float;
+using FLOAT64 = double;
+
 #endif // __TYPE_H__

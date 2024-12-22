@@ -4,7 +4,13 @@
 #define _USING_GLM_
 #ifdef _USING_GLM_
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/glm.hpp"
+#include "glm/gtx/quaternion.hpp"
+#include "glm/gtc/type_ptr.hpp"
+
+using F32QUAT = glm::f32quat;
+using F64QUAT = glm::f64quat;
 
 using FVEC2 = glm::f32vec2;
 using FVEC3 = glm::f32vec3;
