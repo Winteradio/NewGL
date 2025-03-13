@@ -1,7 +1,8 @@
 #include "Program.h"
 
+#include <LogProject/Log.h>
+
 #include "glad/glad.h"
-#include "NewLog.h"
 
 Program::Program()
 	: m_ProgramID(GL_NONE)
@@ -19,7 +20,7 @@ Program::~Program()
 			DetachShader(shader);
 		}
 
-		LOG(INFO) << "Delete Program(" << m_ProgramID <<")";
+		LOGINFO() << "[Program] Delete Program(" << m_ProgramID <<")";
 
 		glDeleteProgram(m_ProgramID);
 
@@ -33,7 +34,7 @@ bool Program::SetShader(const Shader::Type& _shaderType, const std::string& _sha
 
     if (!shader.Init())
     {
-        LOG(ERROR) << "Failed to init Shader(" << static_cast<UINT8>(_shaderType) << ") Path(" << _shaderPath <<")";
+        LOGERROR() << "[Program] Failed to init Shader(" << static_cast<UINT8>(_shaderType) << "[Program] ) Path(" << _shaderPath <<")";
         return false;
     }
 
@@ -56,7 +57,7 @@ void Program::AttachShader(const Shader& _shader)
 {
     if (m_ProgramID == GL_NONE)
     {
-        LOG(ERROR) << "Failed to attach shader, the program is invalid\n";
+        LOGERROR() << "[Program] Failed to attach shader, the program is invalid";
         return;
     }
 
@@ -64,7 +65,7 @@ void Program::AttachShader(const Shader& _shader)
 
     if (!Link())
 	{
-		LOG(ERROR) << "Failed to attach shader(" << _shader.GetShaderID() << ")\n";
+		LOGERROR() << "[Program] Failed to attach shader(" << _shader.GetShaderID() << "[Program] )";
 	}
 }
 
@@ -72,7 +73,7 @@ void Program::DetachShader(const Shader& _shader)
 {
 	if (m_ProgramID == GL_NONE)
 	{
-		LOG(ERROR) << "Failed to detach shader, the program is invalid\n";
+		LOGERROR() << "[Program] Failed to detach shader, the program is invalid";
 		return;
 	}
 
@@ -90,7 +91,7 @@ void Program::Create()
 	}
 	else
 	{
-		LOG(WARN) << "The gl program is already made\n";
+		LOGWARN() << "[Program] The gl program is already made";
 	}
 }
 
@@ -102,7 +103,7 @@ bool Program::Link()
 	if (!CheckLinked())
 	{
 		glGetProgramInfoLog(m_ProgramID, 512, nullptr, cInfoLog);
-		LOG(INFO) << "Failed to link program :" << cInfoLog << "\n";
+		LOGINFO() << "[Program] Failed to link program :" << cInfoLog;
 
 		return false;
 	}

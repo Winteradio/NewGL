@@ -35,6 +35,8 @@ class Camera
 
         void Translate(const FVEC3 vTrans);
         void Translate(const FMAT4 mTranslate);
+
+        void Zoom(const FLOAT32 fDelta);
         
         void Init(const FVEC3 vEye, const FVEC3 vAt);
         void Init(const FrustumVolume tFrustVolume, const ViewVolume tViewVolume);

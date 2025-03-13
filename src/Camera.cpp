@@ -13,10 +13,20 @@ void Camera::Rotate(const FMAT4 mRotate)
 {}
 
 void Camera::Translate(const FVEC3 vTrans)
-{}
+{
+    m_vEye += vTrans;
+    m_vAt += vTrans;
+
+    Init(m_vEye, m_vAt);
+}
 
 void Camera::Translate(const FMAT4 mTranslate)
-{}
+{
+    m_vEye += FVEC3(mTranslate[3]);
+    m_vAt += FVEC3(mTranslate[3]);
+
+    Init(m_vEye, m_vAt);
+}
 
 void Camera::Init(const FVEC3 vEye, const FVEC3 vAt)
 {

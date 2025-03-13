@@ -1,8 +1,9 @@
 #include "Shader.h"
 
+#include <LogProject/Log.h>
+
 #include "glad/glad.h"
 #include "glad/glad_wgl.h"
-#include "NewLog.h"
 
 #include <iostream>
 #include <fstream>
@@ -51,7 +52,7 @@ Shader::~Shader()
 {
     if (m_ShaderID != GL_NONE)
     {
-        LOG(INFO) << "Delete Shader(" << m_ShaderID <<")\n";
+        LOGINFO() << "[Shader] Delete Shader(" << m_ShaderID <<")";
 
         glDeleteShader(m_ShaderID);
 
@@ -66,7 +67,7 @@ bool Shader::Init()
 
     if (GL_NONE == shaderType || stShaderSource.empty())
     {
-        LOG(ERROR) << "Failed to create shader, the shader info is invalid\n";
+        LOGERROR() << "[Shader] Failed to create shader, the shader info is invalid";
         return false;
     }
 
@@ -83,7 +84,7 @@ bool Shader::Init()
     if (!success)
     {
         glGetShaderInfoLog(m_ShaderID, 512, NULL, infoLog);
-        LOG(ERROR) << infoLog << "\n";
+        LOGERROR() << infoLog;
         return false;
     }
 
@@ -121,24 +122,22 @@ const std::string Shader::GetShaderSource()
 {
     if (m_FilePath.empty())
     {
-        LOG(ERROR) << "Failed to open shader file, cause the file path is empty\n";
+        LOGERROR() << "[Shader] Failed to open shader file, cause the file path is empty";
         return std::string();
     }
 
-    LOG(INFO) << m_FilePath << "\n";
+    LOGINFO() << "[Shader] " << m_FilePath << "";
 
     std::ifstream file(m_FilePath);
     if (!file.is_open())
     {
-        LOG(ERROR) << "Failed to open shader file\n";
+        LOGERROR() << "[Shader] Failed to open shader file";
         return std::string();
     }
 
     std::stringstream fileBuffer;
     fileBuffer << file.rdbuf();
-
     std::string shaderCode = fileBuffer.str();
-
-    LOG(INFO) << "Code : " << shaderCode << "\n";
+    
     return shaderCode;
 }
