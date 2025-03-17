@@ -180,8 +180,8 @@ namespace EarCut
 						pNode = pNode->next;
 					}
 
-					pNode->prev = !pNode->prev ? m_pTail : pNode->prev;
-					pNode->next = !pNode->next ? m_pHead : pNode->next;
+					// pNode->prev = !pNode->prev ? m_pTail : pNode->prev;
+					// pNode->next = !pNode->next ? m_pHead : pNode->next;
 					return pNode;
 				}
 

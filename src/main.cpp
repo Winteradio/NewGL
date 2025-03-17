@@ -20,13 +20,14 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
     }
 
     std::vector<FVEC2> vertices = {
-        {0.0f, 0.0f},
-        {2.0f, 8.0f},
-        {5.0f, 10.0f},
-        {8.0f, 8.0f},
-        {10.0f, 0.0f},
-        {7.0f, 4.0f},
-        {3.0f, 4.0f}
+        {3472, 2602},
+        {-515,-515},
+        {3094, 2264},
+        {3166, 2376},
+
+        {3472, 2602},
+
+        //{3020.0f, 190.0f},
     };
 
     {
@@ -34,11 +35,11 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
         engine.Add(geometry);        
     }
 
-    std::vector<UINT32> indices = EarCut::Triangulate(vertices);
-    {
-        Graphic::Geometry geometry = Graphic::Util::Create(vertices, indices, Graphic::eDrawMode::TRIANGLES, Graphic::ePolygonMode::LINE);
-        engine.Add(geometry);        
-    }
+    // std::vector<UINT32> indices = EarCut::Triangulate(vertices);
+    // {
+    //     Graphic::Geometry geometry = Graphic::Util::Create(vertices, indices, Graphic::eDrawMode::TRIANGLES, Graphic::ePolygonMode::LINE);
+    //     engine.Add(geometry);        
+    // }
 
     engine.Update();
 
