@@ -77,7 +77,13 @@ namespace Graphic
 		};
 
 		template<typename T>
-		constexpr UINT8 GetComponentDimension() 
+		struct ComponentDimension<std::vector<T>> 
+		{
+			static constexpr UINT8 Dimension = ComponentDimension<T>::Dimension;
+		};
+
+		template<typename T>
+		constexpr UINT8 GetComponentDimension(const T& _value) 
 		{
 			return ComponentDimension<T>::Dimension;
 		}
@@ -93,6 +99,12 @@ namespace Graphic
 			using Type = T;
 		};
 
+		template<typename T>
+		struct ComponentType<std::vector<T>> 
+		{
+			using Type = typename ComponentType<T>::Type;
+		};
+
 		template<typename T, typename U>
 		struct IsSame
 		{
@@ -106,7 +118,7 @@ namespace Graphic
 		};
 
 		template<typename T>
-		const UINT64 GetComponentType()
+		const UINT64 GetComponentType(const T& _value)
 		{
 			using Type = typename ComponentType<T>::Type;
 
@@ -157,19 +169,10 @@ namespace Graphic
 				return;
 			}
 
-			FVEC3 center = FVEC3(0.0f);
-			for (const auto& vertex : _vertices)
-			{
-				center += vertex;
-			}
-			center /= static_cast<FLOAT32>(_vertices.size());
-
-			FVEC3 min = _vertices[0];
-			FVEC3 max = _vertices[0];
+			FVEC3 min = FVEC3(FLT_EPSILON, FLT_EPSILON, 0.0f);
+			FVEC3 max = FVEC3(-FLT_EPSILON, -FLT_EPSILON, 0.0f);
 			for (auto& vertex : _vertices)
 			{
-				vertex -= center;
-
 				min.x = std::min(min.x, vertex.x);
 				min.y = std::min(min.y, vertex.y);
 
@@ -177,10 +180,12 @@ namespace Graphic
 				max.y = std::max(max.y, vertex.y);
 			}
 
+			FVEC3 center = (min + max) / 2.0f;
+
 			FLOAT32 scale = 2.0f * maxRange / std::max(max.x - min.x, max.y - min.y);
 			for (auto& vertex : _vertices)
 			{
-				vertex *= scale;
+				vertex = (vertex-center) * scale;
 			}
 		}
 	}
@@ -196,15 +201,15 @@ namespace Graphic
 			mesh.VertexBuffer.Target = Internal::GetBufferTarget(eBufferType::VERTEX);
 			mesh.VertexBuffer.Offset = 0;
 			mesh.VertexBuffer.Size = sizeof(decltype(_geometry.Vertices)::value_type) * _geometry.Vertices.size();
-			mesh.VertexBuffer.Type = Internal::GetComponentType<decltype(_geometry.Vertices)::value_type>();
-			mesh.VertexBuffer.Dimension = Internal::GetComponentDimension<decltype(_geometry.Vertices)::value_type>();
+			mesh.VertexBuffer.Type = Internal::GetComponentType(_geometry.Vertices);
+			mesh.VertexBuffer.Dimension = Internal::GetComponentDimension(_geometry.Vertices);
 			mesh.VertexBuffer.Count = _geometry.Vertices.size();
 
 			mesh.IndexBuffer.Target = Internal::GetBufferTarget(eBufferType::INDEX);
 			mesh.IndexBuffer.Offset = 0;
 			mesh.IndexBuffer.Size = sizeof(decltype(_geometry.Indices)::value_type) * _geometry.Indices.size();
-			mesh.IndexBuffer.Type = Internal::GetComponentType<decltype(_geometry.Indices)::value_type>();
-			mesh.IndexBuffer.Dimension = Internal::GetComponentDimension<decltype(_geometry.Indices)::value_type>();
+			mesh.IndexBuffer.Type = Internal::GetComponentType(_geometry.Indices);
+			mesh.IndexBuffer.Dimension = Internal::GetComponentDimension(_geometry.Indices);
 			mesh.IndexBuffer.Count = _geometry.Indices.size();
 
 			return mesh;

@@ -43,8 +43,6 @@ LIST(APPEND SRCS
     ${INCLUDE_DIR}/GraphicType.h
     ${INCLUDE_DIR}/GraphicUtil.h ${SRC_DIR}/GraphicUtil.cpp
 
-    ${INCLUDE_DIR}/EarCut.h
-
     ${GLAD_DIR}/include/glad/glad.h ${GLAD_DIR}/src/glad.c
     ${GLAD_DIR}/include/glad/glad_wgl.h ${GLAD_DIR}/src/glad_wgl.c
     ${GLAD_DIR}/include/KHR/khrplatform.h

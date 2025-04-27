@@ -3,11 +3,14 @@
 
 #include "Engine.h"
 #include "GraphicUtil.h"
-#include "EarCut.h"
+#include <vector>
 
 #pragma comment(linker, "/entry:WinMainCRTStartup")
 #pragma comment(linker, "/subsystem:console")
 
+#include <cmath>
+#include <iostream>
+#include <cfloat>
 
 int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd )
 {
@@ -19,27 +22,22 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
         return -1;
     }
 
-    std::vector<FVEC2> vertices = {
-        {3472, 2602},
-        {-515,-515},
-        {3094, 2264},
-        {3166, 2376},
-
-        {3472, 2602},
-
-        //{3020.0f, 190.0f},
-    };
-
     {
-        Graphic::Geometry geometry = Graphic::Util::Create(vertices, Graphic::eDrawMode::LINE_STRIP, Graphic::ePolygonMode::LINE);
+        std::vector<FVEC2> vertices = {
+			{0.0f, 0.0f},    // 좌하단
+			{100.0f, 0.0f},  // 우하단
+			{100.0f, 100.0f},// 우상단
+			{0.0f, 100.0f},  // 좌상단
+		};
+
+		std::vector<UINT32> indices = {
+			0, 1, 2,   // 첫 번째 삼각형 (좌하단, 우하단, 우상단)
+			0, 2, 3    // 두 번째 삼각형 (좌하단, 우상단, 좌상단)
+		};
+
+        Graphic::Geometry geometry = Graphic::Util::Create(vertices, indices, Graphic::eDrawMode::TRIANGLES, Graphic::ePolygonMode::FILL);
         engine.Add(geometry);        
     }
-
-    // std::vector<UINT32> indices = EarCut::Triangulate(vertices);
-    // {
-    //     Graphic::Geometry geometry = Graphic::Util::Create(vertices, indices, Graphic::eDrawMode::TRIANGLES, Graphic::ePolygonMode::LINE);
-    //     engine.Add(geometry);        
-    // }
 
     engine.Update();
 
